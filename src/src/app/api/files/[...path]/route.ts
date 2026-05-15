@@ -11,11 +11,7 @@ const MIME_TYPES: Record<string, string> = {
   '.gif': 'image/gif',
   '.webp': 'image/webp',
   '.svg': 'image/svg+xml',
-  '.zip': 'application/zip',
 }
-
-// Files that should force download instead of inline
-const DOWNLOAD_EXTENSIONS = new Set(['.zip'])
 
 // GET /api/files/[...path] - Serve uploaded files
 export async function GET(
@@ -43,21 +39,14 @@ export async function GET(
     const fileBuffer = await readFile(resolvedPath)
     const ext = path.extname(resolvedPath).toLowerCase()
     const contentType = MIME_TYPES[ext] || 'application/octet-stream'
-    const fileName = path.basename(resolvedPath)
 
-    const headers: Record<string, string> = {
-      'Content-Type': contentType,
-      'Content-Length': fileBuffer.length.toString(),
-    }
-
-    if (DOWNLOAD_EXTENSIONS.has(ext)) {
-      headers['Content-Disposition'] = `attachment; filename="${fileName}"`
-      headers['Cache-Control'] = 'no-cache'
-    } else {
-      headers['Cache-Control'] = 'public, max-age=31536000, immutable'
-    }
-
-    return new NextResponse(fileBuffer, { headers })
+    return new NextResponse(fileBuffer, {
+      headers: {
+        'Content-Type': contentType,
+        'Cache-Control': 'public, max-age=31536000, immutable',
+        'Content-Length': fileBuffer.length.toString(),
+      },
+    })
   } catch (error) {
     console.error('File serve error:', error)
     return NextResponse.json({ error: 'Internal server error' }, { status: 500 })

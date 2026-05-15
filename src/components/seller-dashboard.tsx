@@ -44,6 +44,7 @@ import { useAuthStore } from '@/store/auth-store';
 import { useNavStore } from '@/store/nav-store';
 import { useAuthModal } from '@/components/auth-modal';
 import MembershipModal from '@/components/membership-modal';
+import DocumentUploadSection from '@/components/document-upload-section';
 import { formatPrice } from '@/lib/types';
 
 // ---- Types ----
@@ -1005,6 +1006,9 @@ export default function SellerDashboard() {
                 </motion.div>
               );
             })()}
+
+            {/* Document Verification Section */}
+            <DocumentUploadSection />
 
             {/* My Services Section */}
             <div className="mb-8">

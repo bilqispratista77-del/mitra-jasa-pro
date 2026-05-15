@@ -26,8 +26,8 @@ const staticTestimonials: Testimonial[] = [
     avatar: '', rating: 4, createdAt: '2024-03-10',
   },
   {
-    id: 's4', name: 'Dimas Pratama', role: 'Mahasiswa',
-    content: 'Bimbingan skripsi di Mitra Jasa Pro benar-benar membantu! Dosen pembimbingnya sabar dan kompeten. Skripsi saya lulus dengan nilai A.',
+    id: 's4', name: 'Dimas Pratama', role: 'Karyawan Swasta',
+    content: 'Saya pesan jasa cleaning service untuk rumah pasca-renovasi. Hasilnya bersih mengkilap, tempat-tempat sulit dijangkau juga rapi. Sangat puas!',
     avatar: '', rating: 5, createdAt: '2024-04-05',
   },
   {

@@ -12,14 +12,14 @@ import {
   DropdownMenuTrigger,
 } from '@/components/ui/dropdown-menu';
 import { Avatar, AvatarFallback } from '@/components/ui/avatar';
-import { Menu, X, LayoutDashboard, Shield, LogOut, Home, Briefcase, BookOpen } from 'lucide-react';
+import { Menu, X, LayoutDashboard, Shield, LogOut } from 'lucide-react';
 import { useState } from 'react';
 import { cn } from '@/lib/utils';
 
-const navItems: { label: string; page: PageName; icon: React.ComponentType<{ className?: string }> }[] = [
-  { label: 'Beranda', page: 'beranda', icon: Home },
-  { label: 'Jasa', page: 'jasa', icon: Briefcase },
-  { label: 'Artikel', page: 'artikel', icon: BookOpen },
+const navItems: { label: string; page: PageName }[] = [
+  { label: 'Beranda', page: 'beranda' },
+  { label: 'Jasa', page: 'jasa' },
+  { label: 'Artikel', page: 'artikel' },
 ];
 
 export default function Navbar() {
@@ -27,7 +27,8 @@ export default function Navbar() {
   const { currentPage, navigate } = useNavStore();
   const [mobileMenuOpen, setMobileMenuOpen] = useState(false);
 
-  const { openLogin, openRegister } = useAuthModal();
+  const { openLogin, openRegisterSelect } = useAuthModal();
+  const openRegister = openRegisterSelect;
 
   const handleLogout = async () => {
     await logout();
@@ -67,7 +68,6 @@ export default function Navbar() {
         {/* Desktop Nav */}
         <nav className="hidden items-center gap-1 md:flex">
           {navItems.map((item) => {
-            const Icon = item.icon;
             const isActive = currentPage === item.page;
             return (
               <button
@@ -80,7 +80,6 @@ export default function Navbar() {
                     : 'text-muted-foreground hover:text-foreground hover:bg-accent'
                 )}
               >
-                <Icon className="h-4 w-4" />
                 {item.label}
                 {isActive && (
                   <span className="absolute bottom-0 left-1/2 -translate-x-1/2 h-0.5 w-6 rounded-full bg-dodger" />
@@ -150,7 +149,6 @@ export default function Navbar() {
         <div className="border-t bg-white md:hidden">
           <div className="space-y-1 px-4 py-3">
             {navItems.map((item) => {
-              const Icon = item.icon;
               const isActive = currentPage === item.page;
               return (
                 <button
@@ -163,7 +161,6 @@ export default function Navbar() {
                       : 'text-muted-foreground hover:bg-accent hover:text-foreground'
                   )}
                 >
-                  <Icon className="h-4 w-4" />
                   {item.label}
                   {isActive && (
                     <span className="ml-auto h-1.5 w-1.5 rounded-full bg-dodger" />

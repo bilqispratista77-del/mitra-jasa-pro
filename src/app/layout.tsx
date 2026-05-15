@@ -21,7 +21,10 @@ export const metadata: Metadata = {
   keywords: ["jasa", "marketplace", "freelance", "Indonesia", "WhatsApp", "desain", "web development"],
   authors: [{ name: "Mitra Jasa Pro Team" }],
   icons: {
-    icon: "/logo.svg",
+    icon: [
+      { url: "/icon.png", sizes: "32x32", type: "image/png" },
+    ],
+    apple: "/apple-icon.png",
   },
 };
 

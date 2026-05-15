@@ -15,11 +15,8 @@ model User {
   phone             String    @default("")
   whatsapp          String    @default("")
   address           String    @default("")
-  subdistrict       String    @default("")
-  district          String    @default("")
-  province          String    @default("")
   avatar            String    @default("")
-  role              String    @default("USER") // USER, SELLER, or ADMIN
+  role              String    @default("SELLER") // SELLER or ADMIN
   verified          Boolean   @default(false)
   active            Boolean   @default(true)
   membershipPlan    String    @default("FREE") // FREE, BASIC, PRO
@@ -27,7 +24,6 @@ model User {
   createdAt         DateTime  @default(now())
   updatedAt         DateTime  @updatedAt
   services          Service[]
-  sellerDocs        SellerDocument[]
 }
 
 model Category {
@@ -117,19 +113,4 @@ model Banner {
   order       Int      @default(0)
   createdAt   DateTime @default(now())
   updatedAt   DateTime @updatedAt
-}
-
-model SellerDocument {
-  id        String   @id @default(cuid())
-  userId    String
-  user      User     @relation(fields: [userId], references: [id], onDelete: Cascade)
-  type      String   // KTP, SIUP, SERTIFIKAT, PORTOFOLIO, LAINNYA
-  fileName  String   @default("")
-  mimeType  String   @default("")
-  fileData  String   @default("") // base64 encoded
-  fileSize  Int      @default(0)  // bytes
-  status    String   @default("PENDING") // PENDING, APPROVED, REJECTED
-  note      String   @default("")
-  createdAt DateTime @default(now())
-  updatedAt DateTime @updatedAt
 }

@@ -1,12 +1,15 @@
 'use client';
 
-import Link from 'next/link';
 import { motion } from 'framer-motion';
 import { Search, Mail, CheckCircle, Zap } from 'lucide-react';
 import { Button } from '@/components/ui/button';
 import { useNavStore } from '@/store/nav-store';
+import { useAuthModal } from '@/components/auth-modal';
 
 export default function CTASection() {
+  const { navigate } = useNavStore();
+  const { openRegisterSeller } = useAuthModal();
+
   return (
     <section className="relative overflow-hidden py-16 sm:py-20">
       {/* Green Gradient Background */}
@@ -52,23 +55,19 @@ export default function CTASection() {
           <div className="flex flex-col sm:flex-row items-center justify-center gap-3 mb-8">
             <Button
               size="lg"
-              asChild
+              onClick={() => navigate('jasa')}
               className="w-full sm:w-auto bg-white text-dodger-700 hover:bg-white/90 font-semibold shadow-lg text-base px-8 h-12 rounded-xl"
             >
-              <Link href="/jasa">
-                <Search className="h-5 w-5 mr-2" />
-                Cari Jasa Sekarang
-              </Link>
+              <Search className="h-5 w-5 mr-2" />
+              Cari Jasa Sekarang
             </Button>
             <Button
               size="lg"
-              asChild
+              onClick={openRegisterSeller}
               className="w-full sm:w-auto bg-white/15 border border-white/40 text-white hover:bg-white/25 font-semibold text-base px-8 h-12 rounded-xl backdrop-blur-sm"
             >
-              <Link href="/register">
-                <Mail className="h-5 w-5 mr-2" />
-                Daftar sebagai Seller
-              </Link>
+              <Mail className="h-5 w-5 mr-2" />
+              Daftar sebagai Seller
             </Button>
           </div>
 
@@ -78,10 +77,7 @@ export default function CTASection() {
               <CheckCircle className="h-4 w-4 text-white/70" />
               <span>Gratis daftar</span>
             </div>
-            <div className="flex items-center gap-1.5">
-              <CheckCircle className="h-4 w-4 text-white/70" />
-              <span>Tanpa biaya transaksi</span>
-            </div>
+
             <div className="flex items-center gap-1.5">
               <CheckCircle className="h-4 w-4 text-white/70" />
               <span>Seller terverifikasi</span>

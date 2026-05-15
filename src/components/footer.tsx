@@ -4,10 +4,12 @@ import Link from 'next/link';
 import { Mail, Phone, Instagram, Facebook, Youtube } from 'lucide-react';
 import { Separator } from '@/components/ui/separator';
 import { useNavStore } from '@/store/nav-store';
+import { useSponsorshipStore } from '@/components/sponsorship-dialog';
 
 export default function Footer() {
   const currentYear = new Date().getFullYear();
   const { navigate } = useNavStore();
+  const openSponsorship = useSponsorshipStore((s) => s.open);
 
   return (
     <footer className="bg-dodger-900 text-dodger-50">
@@ -115,6 +117,14 @@ export default function Footer() {
                   className="text-sm text-dodger-200 hover:text-white transition-colors"
                 >
                   Testimoni
+                </button>
+              </li>
+              <li>
+                <button
+                  onClick={openSponsorship}
+                  className="text-sm text-dodger-200 hover:text-white transition-colors"
+                >
+                  Sponsorship
                 </button>
               </li>
             </ul>

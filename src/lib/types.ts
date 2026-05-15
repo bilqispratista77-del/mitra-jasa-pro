@@ -6,7 +6,7 @@ export interface User {
   whatsapp: string;
   address: string;
   avatar: string;
-  role: 'SELLER' | 'ADMIN';
+  role: 'USER' | 'SELLER' | 'ADMIN';
   membershipPlan: 'FREE' | 'BASIC' | 'PRO';
   membershipExpiresAt: string | null;
 }

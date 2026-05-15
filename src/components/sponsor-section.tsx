@@ -2,6 +2,7 @@
 
 import { useEffect, useState } from 'react';
 import { motion } from 'framer-motion';
+import { Handshake } from 'lucide-react';
 
 interface Sponsor {
   id: string;
@@ -11,14 +12,10 @@ interface Sponsor {
 }
 
 const fallbackSponsors = [
-  { id: '1', name: 'Tokopedia', logoUrl: '', order: 0 },
-  { id: '2', name: 'Bukalapak', logoUrl: '', order: 1 },
-  { id: '3', name: 'Shopee', logoUrl: '', order: 2 },
-  { id: '4', name: 'Gojek', logoUrl: '', order: 3 },
-  { id: '5', name: 'Grab', logoUrl: '', order: 4 },
-  { id: '6', name: 'Traveloka', logoUrl: '', order: 5 },
-  { id: '7', name: 'Dana', logoUrl: '', order: 6 },
-  { id: '8', name: 'OVO', logoUrl: '', order: 7 },
+  { id: '1', name: 'Coming Soon', logoUrl: '', order: 0 },
+  { id: '2', name: 'Coming Soon', logoUrl: '', order: 1 },
+  { id: '3', name: 'Coming Soon', logoUrl: '', order: 2 },
+  { id: '4', name: 'Coming Soon', logoUrl: '', order: 3 },
 ];
 
 function SponsorLogo({ sponsor }: { sponsor: Sponsor }) {
@@ -27,7 +24,7 @@ function SponsorLogo({ sponsor }: { sponsor: Sponsor }) {
   if (!sponsor.logoUrl || imgError) {
     return (
       <span
-        className="text-base sm:text-lg font-bold tracking-tight text-gray-400 transition-colors duration-300 group-hover:text-gray-800"
+        className="text-sm sm:text-base font-bold tracking-tight text-gray-400 transition-colors duration-300 group-hover:text-dodger-700"
         style={{ fontFamily: 'system-ui, sans-serif' }}
       >
         {sponsor.name}
@@ -39,7 +36,7 @@ function SponsorLogo({ sponsor }: { sponsor: Sponsor }) {
     <img
       src={sponsor.logoUrl}
       alt={sponsor.name}
-      className="object-contain max-h-10 max-w-full"
+      className="object-contain max-h-8 max-w-full"
       loading="lazy"
       onError={() => setImgError(true)}
     />
@@ -56,7 +53,6 @@ export default function SponsorSection() {
         const res = await fetch('/api/sponsors');
         const data = await res.json();
         if (!cancelled && data.success && data.data?.length > 0) {
-          // Only use DB sponsors that have valid logo URLs
           const validSponsors = data.data.filter((s: Sponsor) => s.logoUrl && s.logoUrl.trim() !== '');
           if (validSponsors.length > 0) {
             setSponsors(validSponsors);
@@ -71,28 +67,43 @@ export default function SponsorSection() {
   }, []);
 
   return (
-    <section className="py-12 sm:py-16 bg-white">
-      <div className="mx-auto max-w-7xl px-4 sm:px-6 lg:px-8">
+    <section className="py-14 sm:py-20 bg-white relative overflow-hidden">
+      {/* Decorative background */}
+      <div className="absolute inset-0">
+        <div className="absolute top-0 left-1/2 -translate-x-1/2 w-[600px] h-[300px] bg-gradient-to-b from-dodger/[0.03] to-transparent rounded-full blur-3xl" />
+        <div className="absolute -top-20 -right-20 h-40 w-40 rounded-full bg-amber-200/10 blur-2xl" />
+        <div className="absolute -bottom-10 -left-10 h-32 w-32 rounded-full bg-dodger/5 blur-2xl" />
+      </div>
+
+      <div className="relative mx-auto max-w-7xl px-4 sm:px-6 lg:px-8">
         {/* Section Header */}
         <motion.div
           initial={{ opacity: 0, y: 20 }}
           whileInView={{ opacity: 1, y: 0 }}
           viewport={{ once: true }}
           transition={{ duration: 0.5 }}
-          className="text-center mb-10"
+          className="text-center mb-10 sm:mb-14"
         >
-          <h2 className="text-2xl sm:text-3xl font-bold text-foreground">
-            Mitra Kami
+          {/* Decorative badge */}
+          <div className="inline-flex items-center gap-2 rounded-full bg-gradient-to-r from-dodger/10 to-amber-100 px-5 py-2 mb-4 border border-dodger/10">
+            <Handshake className="h-4 w-4 text-dodger" />
+            <span className="text-xs font-semibold text-dodger-700 uppercase tracking-widest">Trusted Partners</span>
+          </div>
+          <h2 className="text-2xl sm:text-3xl lg:text-4xl font-bold text-foreground">
+            Dipercaya oleh <span className="text-transparent bg-clip-text bg-gradient-to-r from-dodger to-dodger-600">Mitra Terbaik</span>
           </h2>
+          <p className="mt-3 text-sm sm:text-base text-muted-foreground max-w-lg mx-auto">
+            Bekerja sama dengan berbagai mitra untuk memberikan layanan terbaik bagi Anda
+          </p>
         </motion.div>
 
-        {/* Logos Grid */}
+        {/* Logos Grid with premium frame */}
         <motion.div
           initial={{ opacity: 0 }}
           whileInView={{ opacity: 1 }}
           viewport={{ once: true }}
           transition={{ duration: 0.6, delay: 0.2 }}
-          className="grid grid-cols-2 sm:grid-cols-4 lg:grid-cols-8 gap-6 sm:gap-8 items-center"
+          className="grid grid-cols-2 sm:grid-cols-4 gap-4 sm:gap-6 lg:gap-8 items-center max-w-2xl mx-auto"
         >
           {sponsors.map((sponsor, index) => (
             <motion.div
@@ -101,9 +112,14 @@ export default function SponsorSection() {
               whileInView={{ opacity: 1, y: 0 }}
               viewport={{ once: true }}
               transition={{ duration: 0.4, delay: 0.1 + index * 0.05 }}
-              className="group flex items-center justify-center"
+              className="group"
             >
-              <div className="flex h-20 w-full items-center justify-center rounded-xl border border-gray-100 bg-gray-50/50 px-4 py-5 transition-all duration-300 hover:border-gray-200 hover:bg-white hover:shadow-md grayscale opacity-60 hover:grayscale-0 hover:opacity-100">
+              <div className="relative flex h-[88px] sm:h-[96px] items-center justify-center rounded-2xl bg-gradient-to-br from-white via-white to-gray-50/80 p-4 transition-all duration-500 hover:shadow-xl hover:shadow-dodger/5 hover:-translate-y-1 border border-gray-100">
+                {/* Gradient border glow on hover */}
+                <div className="absolute inset-0 rounded-2xl bg-gradient-to-br from-dodger/20 via-amber-200/20 to-dodger/20 opacity-0 group-hover:opacity-100 transition-opacity duration-500 -z-10 blur-sm" />
+                {/* Top shine line */}
+                <div className="absolute top-0 left-4 right-4 h-[2px] bg-gradient-to-r from-transparent via-dodger/20 to-transparent opacity-0 group-hover:opacity-100 transition-opacity duration-500 rounded-full" />
+                {/* Content */}
                 <SponsorLogo sponsor={sponsor} />
               </div>
             </motion.div>

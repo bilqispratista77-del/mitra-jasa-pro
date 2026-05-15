@@ -50,5 +50,46 @@ test
 prompt
 
 server.log
-# Skills directory
+
+# Skills directory (internal tools, not part of the app)
 /skills/
+
+# Upload files (user uploads, temporary files)
+/upload/
+
+# Download files (deployment packages, archives)
+/download/
+
+# Database files (generated locally, not committed)
+/db/
+*.db
+*.db-journal
+*.db-wal
+
+# Mini services (running separately)
+/mini-services/
+
+# Build outputs & archives
+*.tar
+*.zip
+
+# .zscripts (internal dev scripts)
+/.zscripts/
+
+# IDE
+.vscode/
+.idea/
+
+# Worklog (internal)
+worklog.md
+
+# Uploads directory (user uploaded files)
+/uploads/
+
+# Public uploads
+/public/uploads/
+
+# Dev infrastructure (not part of the app)
+Caddyfile
+/examples/
+*.zip

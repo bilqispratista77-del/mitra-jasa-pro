@@ -24,6 +24,7 @@ import LegalPage from '@/components/legal-page';
 import SellerDashboard from '@/components/seller-dashboard';
 import AdminPanel from '@/components/admin-panel';
 import AuthModal from '@/components/auth-modal';
+import SponsorshipDialog from '@/components/sponsorship-dialog';
 import ServiceCard from '@/components/service-card';
 import { useNavStore } from '@/store/nav-store';
 import type { Service } from '@/lib/types';
@@ -43,7 +44,7 @@ function PopularServiceCard({ service, index }: { service: Service; index: numbe
 
 function BerandaPage() {
   const { navigate } = useNavStore();
-  const { openRegister } = useAuthModal();
+  const { openRegisterSeller } = useAuthModal();
   const [popularServices, setPopularServices] = useState<Service[]>([]);
   const [loading, setLoading] = useState(true);
 
@@ -143,7 +144,7 @@ function BerandaPage() {
               <p className="text-muted-foreground mb-4">
                 Belum ada jasa yang tersedia saat ini.
               </p>
-              <Button onClick={openRegister}>Jadi Seller Pertama</Button>
+              <Button onClick={openRegisterSeller}>Jadi Seller Pertama</Button>
             </div>
           )}
 
@@ -215,6 +216,7 @@ export default function Home() {
 
       <Footer />
       <AuthModal />
+      <SponsorshipDialog />
     </div>
   );
 }

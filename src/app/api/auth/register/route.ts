@@ -5,7 +5,7 @@ import { hashPassword, createSessionToken, SESSION_COOKIE_NAME } from '@/lib/aut
 export async function POST(request: NextRequest) {
   try {
     const body = await request.json()
-    const { email, password, name, phone, whatsapp, address } = body
+    const { email, password, name, phone, whatsapp, address, subdistrict, district, province, role } = body
 
     // Validate required fields
     if (!email || !password || !name) {
@@ -14,6 +14,9 @@ export async function POST(request: NextRequest) {
         { status: 400 }
       )
     }
+
+    // Validate role
+    const userRole = (role === 'SELLER') ? 'SELLER' : 'USER'
 
     // Check if email already exists
     const existingUser = await db.user.findUnique({
@@ -37,9 +40,12 @@ export async function POST(request: NextRequest) {
         password: hashedPassword,
         name,
         phone: phone || '',
-        whatsapp: whatsapp || '',
+        whatsapp: whatsapp || phone || '',
         address: address || '',
-        role: 'SELLER',
+        subdistrict: subdistrict || '',
+        district: district || '',
+        province: province || '',
+        role: userRole,
       },
     })
 

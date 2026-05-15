@@ -1,0 +1,116 @@
+generator client {
+  provider = "prisma-client-js"
+}
+
+datasource db {
+  provider = "postgresql"
+  url      = env("DATABASE_URL")
+}
+
+model User {
+  id                String    @id @default(cuid())
+  email             String    @unique
+  password          String
+  name              String
+  phone             String    @default("")
+  whatsapp          String    @default("")
+  address           String    @default("")
+  avatar            String    @default("")
+  role              String    @default("SELLER") // SELLER or ADMIN
+  verified          Boolean   @default(false)
+  active            Boolean   @default(true)
+  membershipPlan    String    @default("FREE") // FREE, BASIC, PRO
+  membershipExpiresAt DateTime?
+  createdAt         DateTime  @default(now())
+  updatedAt         DateTime  @updatedAt
+  services          Service[]
+}
+
+model Category {
+  id            String        @id @default(cuid())
+  name          String
+  slug          String        @unique
+  icon          String        @default("")
+  services      Service[]
+  subCategories SubCategory[]
+}
+
+model SubCategory {
+  id         String   @id @default(cuid())
+  name       String
+  slug       String   @unique
+  categoryId String
+  category   Category @relation(fields: [categoryId], references: [id], onDelete: Cascade)
+  services   Service[]
+}
+
+model Service {
+  id            String      @id @default(cuid())
+  title         String
+  description   String
+  price         Float
+  imageUrl      String      @default("")
+  location      String      @default("")
+  whatsapp      String      @default("")
+  rating        Float       @default(0)
+  reviewCount   Int         @default(0)
+  featured      Boolean     @default(false)
+  approved      Boolean     @default(true)
+  createdAt     DateTime    @default(now())
+  updatedAt     DateTime    @updatedAt
+  categoryId    String
+  category      Category    @relation(fields: [categoryId], references: [id])
+  subCategoryId String?
+  subCategory   SubCategory? @relation(fields: [subCategoryId], references: [id])
+  sellerId      String
+  seller        User        @relation(fields: [sellerId], references: [id])
+}
+
+model Testimonial {
+  id        String   @id @default(cuid())
+  name      String
+  role      String   @default("")
+  content   String
+  avatar    String   @default("")
+  rating    Int      @default(5)
+  createdAt DateTime @default(now())
+}
+
+model Article {
+  id          String   @id @default(cuid())
+  title       String
+  slug        String   @unique
+  excerpt     String
+  content     String
+  imageUrl    String   @default("")
+  category    String   @default("")
+  author      String   @default("")
+  authorAvatar String  @default("")
+  readTime    Int      @default(5)
+  createdAt   DateTime @default(now())
+  updatedAt   DateTime @updatedAt
+}
+
+model Sponsor {
+  id        String   @id @default(cuid())
+  name      String
+  logoUrl   String   @default("")
+  active    Boolean  @default(true)
+  order     Int      @default(0)
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+}
+
+model Banner {
+  id          String   @id @default(cuid())
+  title       String
+  subtitle    String   @default("")
+  description String   @default("")
+  ctaText     String   @default("")
+  ctaLink     String   @default("")
+  imageUrl    String   @default("")
+  active      Boolean  @default(true)
+  order       Int      @default(0)
+  createdAt   DateTime @default(now())
+  updatedAt   DateTime @updatedAt
+}

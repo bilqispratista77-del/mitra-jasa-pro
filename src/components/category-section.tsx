@@ -49,6 +49,76 @@ function getCategoryIcon(iconName: string) {
   return iconMap.default;
 }
 
+// Static fallback categories - always visible, matches actual service categories
+const staticCategories: (Category & { serviceCount?: number; subCategories?: (SubCategory & { serviceCount?: number })[] })[] = [
+  {
+    id: 'fc-1', name: 'Jasa Kebersihan', slug: 'jasa-kebersihan', icon: 'sparkles', serviceCount: 5,
+    subCategories: [
+      { id: 'fs-1-1', name: 'ART Harian', slug: 'art-harian', categoryId: 'fc-1', category: {} as Category },
+      { id: 'fs-1-2', name: 'Cleaning Service', slug: 'cleaning-service', categoryId: 'fc-1', category: {} as Category },
+      { id: 'fs-1-3', name: 'Cuci Sofa', slug: 'cuci-sofa', categoryId: 'fc-1', category: {} as Category },
+      { id: 'fs-1-4', name: 'Cuci Kasur', slug: 'cuci-kasur', categoryId: 'fc-1', category: {} as Category },
+      { id: 'fs-1-5', name: 'Sedot WC', slug: 'sedot-wc', categoryId: 'fc-1', category: {} as Category },
+    ],
+  },
+  {
+    id: 'fc-2', name: 'Servis Elektronik & Kendaraan', slug: 'servis-elektronik-kendaraan', icon: 'wrench', serviceCount: 4,
+    subCategories: [
+      { id: 'fs-2-1', name: 'Servis AC', slug: 'servis-ac', categoryId: 'fc-2', category: {} as Category },
+      { id: 'fs-2-2', name: 'Servis Laptop', slug: 'servis-laptop', categoryId: 'fc-2', category: {} as Category },
+      { id: 'fs-2-3', name: 'Bengkel Mobil', slug: 'bengkel-mobil', categoryId: 'fc-2', category: {} as Category },
+      { id: 'fs-2-4', name: 'Bengkel Motor', slug: 'bengkel-motor', categoryId: 'fc-2', category: {} as Category },
+    ],
+  },
+  {
+    id: 'fc-3', name: 'Perbaikan Rumah & Renovasi', slug: 'perbaikan-rumah-renovasi', icon: 'hammer', serviceCount: 4,
+    subCategories: [
+      { id: 'fs-3-1', name: 'Tukang Listrik', slug: 'tukang-listrik', categoryId: 'fc-3', category: {} as Category },
+      { id: 'fs-3-2', name: 'Renovasi Rumah', slug: 'renovasi-rumah', categoryId: 'fc-3', category: {} as Category },
+      { id: 'fs-3-3', name: 'Pengecatan Rumah', slug: 'pengecatan-rumah', categoryId: 'fc-3', category: {} as Category },
+      { id: 'fs-3-4', name: 'Pemasangan Plafon', slug: 'pemasangan-plafon', categoryId: 'fc-3', category: {} as Category },
+    ],
+  },
+  {
+    id: 'fc-4', name: 'Pendidikan', slug: 'pendidikan', icon: 'graduation', serviceCount: 3,
+    subCategories: [
+      { id: 'fs-4-1', name: 'Les SD', slug: 'les-sd', categoryId: 'fc-4', category: {} as Category },
+      { id: 'fs-4-2', name: 'Les SMA & UTBK', slug: 'les-sma', categoryId: 'fc-4', category: {} as Category },
+      { id: 'fs-4-3', name: 'Bimbingan Masuk PTN', slug: 'bimbingan-masuk-ptn', categoryId: 'fc-4', category: {} as Category },
+    ],
+  },
+  {
+    id: 'fc-5', name: 'Transportasi', slug: 'transportasi', icon: 'car', serviceCount: 2,
+    subCategories: [
+      { id: 'fs-5-1', name: 'Rental Mobil', slug: 'rental-mobil', categoryId: 'fc-5', category: {} as Category },
+      { id: 'fs-5-2', name: 'Driver Harian', slug: 'driver-harian', categoryId: 'fc-5', category: {} as Category },
+    ],
+  },
+  {
+    id: 'fc-6', name: 'Event & Hiburan', slug: 'event-hiburan', icon: 'party', serviceCount: 3,
+    subCategories: [
+      { id: 'fs-6-1', name: 'Wedding Organizer', slug: 'wedding-organizer', categoryId: 'fc-6', category: {} as Category },
+      { id: 'fs-6-2', name: 'Fotografer & Videografer', slug: 'fotografer', categoryId: 'fc-6', category: {} as Category },
+      { id: 'fs-6-3', name: 'Dekorasi', slug: 'dekorasi', categoryId: 'fc-6', category: {} as Category },
+    ],
+  },
+  {
+    id: 'fc-7', name: 'Kecantikan & Kesehatan', slug: 'kecantikan-kesehatan', icon: 'heart', serviceCount: 3,
+    subCategories: [
+      { id: 'fs-7-1', name: 'Makeup Artist (MUA)', slug: 'makeup-artist', categoryId: 'fc-7', category: {} as Category },
+      { id: 'fs-7-2', name: 'Pijat & Massage', slug: 'pijat-massage', categoryId: 'fc-7', category: {} as Category },
+      { id: 'fs-7-3', name: 'Personal Trainer', slug: 'personal-trainer', categoryId: 'fc-7', category: {} as Category },
+    ],
+  },
+  {
+    id: 'fc-8', name: 'Digital Marketing', slug: 'digital-marketing', icon: 'megaphone', serviceCount: 2,
+    subCategories: [
+      { id: 'fs-8-1', name: 'Pembuatan Website', slug: 'pembuatan-website', categoryId: 'fc-8', category: {} as Category },
+      { id: 'fs-8-2', name: 'Social Media Marketing', slug: 'social-media-marketing', categoryId: 'fc-8', category: {} as Category },
+    ],
+  },
+];
+
 const containerVariants = {
   hidden: { opacity: 0 },
   visible: {
@@ -63,7 +133,7 @@ const itemVariants = {
 };
 
 export default function CategorySection() {
-  const [categories, setCategories] = useState<(Category & { serviceCount?: number; subCategories?: (SubCategory & { serviceCount?: number })[] })[]>([]);
+  const [categories, setCategories] = useState<(Category & { serviceCount?: number; subCategories?: (SubCategory & { serviceCount?: number })[] })[]>(staticCategories);
   const [loading, setLoading] = useState(true);
   const [expandedCategory, setExpandedCategory] = useState<string | null>(null);
 
@@ -72,11 +142,12 @@ export default function CategorySection() {
       try {
         const res = await fetch('/api/categories');
         const data = await res.json();
-        if (data.success) {
-          setCategories(data.data || []);
+        if (data.success && data.data?.length > 0) {
+          setCategories(data.data);
         }
+        // If API returns empty or fails, staticCategories remain displayed
       } catch {
-        // Silent fail
+        // Use static categories as fallback
       } finally {
         setLoading(false);
       }
@@ -157,7 +228,7 @@ export default function CategorySection() {
                           {category.name}
                         </p>
                         <p className="text-xs text-muted-foreground mt-0.5">
-                          {serviceCount} jasa · {subCats.length} sub
+                          {serviceCount > 0 ? `${serviceCount} jasa` : ''} · {subCats.length} sub
                         </p>
                       </div>
                       <div className={`shrink-0 transition-transform duration-200 ${isExpanded ? 'rotate-180' : ''}`}>
@@ -192,7 +263,7 @@ export default function CategorySection() {
                               >
                                 <ChevronRight className="h-3 w-3 shrink-0 text-dodger/40 group-hover/sub:text-dodger" />
                                 <span className="truncate">{sub.name}</span>
-                                {sub.serviceCount !== undefined && (
+                                {sub.serviceCount !== undefined && sub.serviceCount > 0 && (
                                   <span className="ml-auto text-[11px] text-muted-foreground/60 shrink-0">
                                     {sub.serviceCount}
                                   </span>

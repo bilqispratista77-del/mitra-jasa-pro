@@ -29,6 +29,39 @@ import ServiceCard from '@/components/service-card';
 import { useNavStore } from '@/store/nav-store';
 import type { Service } from '@/lib/types';
 
+
+// Static fallback services - always visible, matches actual seed data
+const staticPopularServices: Service[] = [
+  {
+    id: 'fs-1', title: 'ART Harian Profesional', description: 'Asisten rumah tangga harian berpengalaman untuk membantu pekerjaan rumah seperti memasak, membersihkan, dan mencuci.',
+    price: 150000, imageUrl: 'https://images.unsplash.com/photo-1581578731548-c64695cc6952?w=600&h=400&fit=crop', location: 'Jakarta', whatsapp: '628111222333',
+    rating: 4.8, reviewCount: 95, featured: true, approved: true, createdAt: '2024-01-01', updatedAt: '2024-01-01',
+    categoryId: 'cat-1', sellerId: 's-1', seller: { id: 's-1', name: 'Budi Santoso', avatar: '' },
+    category: { id: 'cat-1', name: 'Jasa Kebersihan', slug: 'jasa-kebersihan', icon: '' },
+  },
+  {
+    id: 'fs-2', title: 'Servis AC Rumah & Kantor', description: 'Teknisi AC profesional untuk servis, cuci, dan pasang AC semua merk. Garansi kerja dan harga transparan.',
+    price: 150000, imageUrl: 'https://images.unsplash.com/photo-1631567091046-7dbe4d6b1b47?w=600&h=400&fit=crop', location: 'Jakarta', whatsapp: '628333444555',
+    rating: 4.8, reviewCount: 143, featured: true, approved: true, createdAt: '2024-01-01', updatedAt: '2024-01-01',
+    categoryId: 'cat-2', sellerId: 's-2', seller: { id: 's-2', name: 'Ahmad Fauzi', avatar: '' },
+    category: { id: 'cat-2', name: 'Servis Elektronik', slug: 'servis-elektronik', icon: '' },
+  },
+  {
+    id: 'fs-3', title: 'Wedding Organizer Profesional', description: 'Jasa WO pernikahan lengkap dari perencanaan hingga pelaksanaan. Dekorasi, katering, dokumentasi all-in-one.',
+    price: 15000000, imageUrl: 'https://images.unsplash.com/photo-1519741497674-611481863552?w=600&h=400&fit=crop', location: 'Jakarta', whatsapp: '628444555666',
+    rating: 4.9, reviewCount: 167, featured: true, approved: true, createdAt: '2024-01-01', updatedAt: '2024-01-01',
+    categoryId: 'cat-5', sellerId: 's-3', seller: { id: 's-3', name: 'Dewi Lestari', avatar: '' },
+    category: { id: 'cat-5', name: 'Event & Hiburan', slug: 'event-hiburan', icon: '' },
+  },
+  {
+    id: 'fs-4', title: 'Makeup Artist (MUA) Profesional', description: 'Jasa makeup profesional untuk wedding, wisuda, pesta, dan photoshoot. Hasil flawless.',
+    price: 500000, imageUrl: 'https://images.unsplash.com/photo-1487412947147-5cebf100ffc2?w=600&h=400&fit=crop', location: 'Jakarta', whatsapp: '628222333444',
+    rating: 4.9, reviewCount: 187, featured: true, approved: true, createdAt: '2024-01-01', updatedAt: '2024-01-01',
+    categoryId: 'cat-6', sellerId: 's-1', seller: { id: 's-1', name: 'Siti Rahayu', avatar: '' },
+    category: { id: 'cat-6', name: 'Kecantikan', slug: 'kecantikan-kesehatan', icon: '' },
+  },
+];
+
 function PopularServiceCard({ service, index }: { service: Service; index: number }) {
   return (
     <motion.div
@@ -45,7 +78,7 @@ function PopularServiceCard({ service, index }: { service: Service; index: numbe
 function BerandaPage() {
   const { navigate } = useNavStore();
   const { openRegisterSeller } = useAuthModal();
-  const [popularServices, setPopularServices] = useState<Service[]>([]);
+  const [popularServices, setPopularServices] = useState<Service[]>(staticPopularServices);
   const [loading, setLoading] = useState(true);
 
   useEffect(() => {
@@ -70,9 +103,12 @@ function BerandaPage() {
         const fillers = rated.filter((s) => !featuredIds.has(s.id));
         const combined = [...featured, ...fillers].slice(0, 4);
 
-        setPopularServices(combined);
+        // Only update if API returned actual data, otherwise keep static fallback
+        if (combined.length > 0) {
+          setPopularServices(combined);
+        }
       } catch {
-        // Silent fail
+        // Use static fallback services
       } finally {
         setLoading(false);
       }

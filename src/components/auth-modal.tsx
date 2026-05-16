@@ -14,7 +14,8 @@ import {
 import { Input } from '@/components/ui/input';
 import { Label } from '@/components/ui/label';
 import { Button } from '@/components/ui/button';
-import { Loader2, Mail, Lock, Eye, EyeOff, User, Phone, MessageCircle, CheckCircle2, MapPin, Briefcase, Users, ArrowRight } from 'lucide-react';
+import { Loader2, Mail, Lock, Eye, EyeOff, User, Phone, MessageCircle, CheckCircle2, MapPin, Briefcase, Users, ArrowRight, AlertCircle } from 'lucide-react';
+import { toast } from 'sonner';
 
 // ---------------------------------------------------------------------------
 // Inline Zustand store for auth modal state
@@ -140,19 +141,27 @@ function LoginForm({
     if (!validate()) return;
 
     setIsLoading(true);
-    const result = await login(email.trim(), password);
-    setIsLoading(false);
+    try {
+      const result = await login(email.trim(), password);
+      setIsLoading(false);
 
-    if (result.success) {
-      await checkAuth();
-      close();
-    } else {
-      setFormError(result.error || 'Login gagal');
+      if (result.success) {
+        await checkAuth();
+        close();
+        toast.success(`Selamat datang kembali!`);
+      } else {
+        setFormError(result.error || 'Login gagal');
+      }
+    } catch (err) {
+      setIsLoading(false);
+      const msg = err instanceof Error ? err.message : 'Terjadi kesalahan koneksi';
+      setFormError(msg);
+      toast.error(msg);
     }
   };
 
   return (
-    <form onSubmit={handleSubmit} className="space-y-4">
+    <form id="login-form" onSubmit={handleSubmit} className="space-y-4">
       <FormField
         id="login-email"
         label="Email"
@@ -194,11 +203,14 @@ function LoginForm({
         className="h-11 w-full rounded-lg bg-dodger hover:bg-dodger-dark text-white font-semibold transition-colors"
       >
         {isLoading && <Loader2 className="h-4 w-4 animate-spin" />}
-        Masuk
+        {isLoading ? 'Memproses...' : 'Masuk'}
       </Button>
 
       {formError && (
-        <p className="text-center text-sm text-destructive">{formError}</p>
+        <div className="flex items-center gap-2 rounded-lg bg-destructive/10 border border-destructive/20 p-3 text-sm text-destructive">
+          <AlertCircle className="h-4 w-4 shrink-0" />
+          <span>{formError}</span>
+        </div>
       )}
 
       <div className="relative flex items-center py-1">
@@ -388,26 +400,30 @@ function RegisterMemberForm({
     if (!validate()) return;
 
     setIsLoading(true);
-    const result = await register({
-      email: email.trim(),
-      password,
-      name: name.trim(),
-      phone: phone.trim(),
-      whatsapp: phone.trim(),
-      role: 'USER',
-    });
-    setIsLoading(false);
-
-    if (result.success) {
-      await checkAuth();
-      showRegisterSuccess(name.trim(), phone.trim(), 'USER');
-    } else {
-      setFormError(result.error || 'Registrasi gagal');
+    try {
+      const result = await register({
+        email: email.trim(),
+        password,
+        name: name.trim(),
+        phone: phone.trim(),
+        whatsapp: phone.trim(),
+        role: 'USER',
+      });
+      if (result.success) {
+        await checkAuth();
+        showRegisterSuccess(name.trim(), phone.trim(), 'USER');
+      } else {
+        setFormError(result.error || 'Registrasi gagal');
+      }
+    } catch (err) {
+      const msg = err instanceof Error ? err.message : 'Terjadi kesalahan koneksi';
+      setFormError(msg);
     }
+    setIsLoading(false);
   };
 
   return (
-    <form onSubmit={handleSubmit} className="space-y-4">
+    <form id="reg-member-form" onSubmit={handleSubmit} className="space-y-4">
       {/* Nama Lengkap */}
       <FormField
         id="reg-member-name"
@@ -490,7 +506,7 @@ function RegisterMemberForm({
         className="h-11 w-full rounded-lg bg-emerald-500 hover:bg-emerald-600 text-white font-semibold transition-colors"
       >
         {isLoading && <Loader2 className="h-4 w-4 animate-spin" />}
-        Daftar sebagai Member
+        {isLoading ? 'Memproses...' : 'Daftar sebagai Member'}
       </Button>
 
       {formError && (
@@ -563,30 +579,34 @@ function RegisterSellerForm({
     if (!validate()) return;
 
     setIsLoading(true);
-    const result = await register({
-      email: email.trim(),
-      password,
-      name: name.trim(),
-      phone: phone.trim(),
-      whatsapp: phone.trim(),
-      address: address.trim(),
-      subdistrict: subdistrict.trim(),
-      district: district.trim(),
-      province: province.trim(),
-      role: 'SELLER',
-    });
-    setIsLoading(false);
-
-    if (result.success) {
-      await checkAuth();
-      showRegisterSuccess(name.trim(), phone.trim(), 'SELLER');
-    } else {
-      setFormError(result.error || 'Registrasi gagal');
+    try {
+      const result = await register({
+        email: email.trim(),
+        password,
+        name: name.trim(),
+        phone: phone.trim(),
+        whatsapp: phone.trim(),
+        address: address.trim(),
+        subdistrict: subdistrict.trim(),
+        district: district.trim(),
+        province: province.trim(),
+        role: 'SELLER',
+      });
+      if (result.success) {
+        await checkAuth();
+        showRegisterSuccess(name.trim(), phone.trim(), 'SELLER');
+      } else {
+        setFormError(result.error || 'Registrasi gagal');
+      }
+    } catch (err) {
+      const msg = err instanceof Error ? err.message : 'Terjadi kesalahan koneksi';
+      setFormError(msg);
     }
+    setIsLoading(false);
   };
 
   return (
-    <form onSubmit={handleSubmit} className="space-y-4">
+    <form id="reg-seller-form" onSubmit={handleSubmit} className="space-y-4">
       {/* Nama Lengkap */}
       <FormField
         id="reg-seller-name"
@@ -718,7 +738,7 @@ function RegisterSellerForm({
         className="h-11 w-full rounded-lg bg-dodger hover:bg-dodger-dark text-white font-semibold transition-colors"
       >
         {isLoading && <Loader2 className="h-4 w-4 animate-spin" />}
-        Daftar sebagai Seller
+        {isLoading ? 'Memproses...' : 'Daftar sebagai Seller'}
       </Button>
 
       {formError && (
@@ -750,8 +770,7 @@ function RegisterSellerForm({
 // ---------------------------------------------------------------------------
 
 function RegisterSuccessScreen() {
-  const { close, registerData, openRegisterSelect } = useAuthModalStore();
-  const { navigate } = useAuthStore();
+  const { close, registerData } = useAuthModalStore();
   const { navigate: navNavigate } = useNavStore();
 
   if (!registerData) return null;
@@ -866,7 +885,7 @@ export default function AuthModal() {
 
   return (
     <Dialog open={isOpen} onOpenChange={handleOpenChange}>
-      <DialogContent className="sm:max-w-md p-6 gap-0 overflow-y-auto max-h-[90vh]">
+      <DialogContent className="sm:max-w-md p-6 gap-0 overflow-y-auto max-h-[90vh]" onPointerDownOutside={(e) => e.preventDefault()}>
         {/* Header */}
         <DialogHeader className="space-y-1 text-center pb-4">
           <DialogTitle className="text-2xl font-bold gradient-text">

@@ -3,6 +3,8 @@ import { Geist, Geist_Mono } from "next/font/google";
 import "./globals.css";
 import { Toaster } from "@/components/ui/sonner";
 import WhatsAppFloating from "@/components/whatsapp-floating";
+import GitUploadGuide from "@/components/git-upload-guide";
+import DownloadButton from "@/components/download-button";
 import { AuthInitializer } from "@/components/auth-initializer";
 
 const geistSans = Geist({
@@ -41,6 +43,8 @@ export default function RootLayout({
         <AuthInitializer />
         {children}
         <WhatsAppFloating />
+        <GitUploadGuide />
+        <DownloadButton />
         <Toaster position="top-right" richColors />
       </body>
     </html>

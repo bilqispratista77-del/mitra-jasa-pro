@@ -2,7 +2,7 @@
 
 import { useEffect, useState } from 'react';
 import { motion } from 'framer-motion';
-import { Handshake } from 'lucide-react';
+import { Handshake, ShieldCheck, Award, Zap } from 'lucide-react';
 
 interface Sponsor {
   id: string;
@@ -11,24 +11,27 @@ interface Sponsor {
   order: number;
 }
 
+// Static fallback - trusted features instead of "Coming Soon" placeholders
 const fallbackSponsors = [
-  { id: '1', name: 'Coming Soon', logoUrl: '', order: 0 },
-  { id: '2', name: 'Coming Soon', logoUrl: '', order: 1 },
-  { id: '3', name: 'Coming Soon', logoUrl: '', order: 2 },
-  { id: '4', name: 'Coming Soon', logoUrl: '', order: 3 },
+  { id: '1', name: 'Verified Sellers', logoUrl: '', order: 0 },
+  { id: '2', name: 'Secure Payments', logoUrl: '', order: 1 },
+  { id: '3', name: '24/7 Support', logoUrl: '', order: 2 },
+  { id: '4', name: 'Quality Guaranteed', logoUrl: '', order: 3 },
 ];
 
-function SponsorLogo({ sponsor }: { sponsor: Sponsor }) {
-  const [imgError, setImgError] = useState(false);
+const featureIcons = [ShieldCheck, Award, Zap, Handshake];
 
-  if (!sponsor.logoUrl || imgError) {
+function SponsorLogo({ sponsor, index }: { sponsor: Sponsor; index: number }) {
+  const Icon = featureIcons[index % featureIcons.length];
+
+  if (!sponsor.logoUrl) {
     return (
-      <span
-        className="text-sm sm:text-base font-bold tracking-tight text-gray-400 transition-colors duration-300 group-hover:text-dodger-700"
-        style={{ fontFamily: 'system-ui, sans-serif' }}
-      >
-        {sponsor.name}
-      </span>
+      <div className="flex flex-col items-center gap-2 text-center">
+        <Icon className="h-6 w-6 text-dodger/60" />
+        <span className="text-xs sm:text-sm font-bold tracking-tight text-foreground/80 transition-colors duration-300 group-hover:text-dodger-700">
+          {sponsor.name}
+        </span>
+      </div>
     );
   }
 
@@ -38,7 +41,6 @@ function SponsorLogo({ sponsor }: { sponsor: Sponsor }) {
       alt={sponsor.name}
       className="object-contain max-h-8 max-w-full"
       loading="lazy"
-      onError={() => setImgError(true)}
     />
   );
 }
@@ -120,7 +122,7 @@ export default function SponsorSection() {
                 {/* Top shine line */}
                 <div className="absolute top-0 left-4 right-4 h-[2px] bg-gradient-to-r from-transparent via-dodger/20 to-transparent opacity-0 group-hover:opacity-100 transition-opacity duration-500 rounded-full" />
                 {/* Content */}
-                <SponsorLogo sponsor={sponsor} />
+                <SponsorLogo sponsor={sponsor} index={index} />
               </div>
             </motion.div>
           ))}
